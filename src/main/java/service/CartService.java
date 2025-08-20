@@ -3,51 +3,40 @@ package service;
 import model.CartItem;
 import repository.CartRepository;
 import java.util.List;
+import java.math.BigDecimal;
 
-public class CartService implements ICartService {
-    private CartRepository cartRepository;
-    
-    public CartService() {
-        this.cartRepository = new CartRepository();
-    }
-    
-    @Override
-    public List<CartItem> getCartItemsByUserId(int userId) {
-        return cartRepository.getCartItemsByUserId(userId);
-    }
-    
-    @Override
-    public boolean addToCart(int userId, int plantId, int quantity) {
-        if (quantity <= 0) {
-            return false;
-        }
-        
-        CartItem cartItem = new CartItem(userId, plantId, quantity);
-        return cartRepository.addToCart(cartItem);
-    }
-    
-    @Override
-    public boolean updateCartItemQuantity(int cartItemId, int newQuantity) {
-        if (newQuantity <= 0) {
-            // Nếu số lượng <= 0, xóa item khỏi giỏ hàng
-            return cartRepository.removeFromCart(cartItemId);
-        }
-        
-        return cartRepository.updateCartItemQuantity(cartItemId, newQuantity);
-    }
-    
-    @Override
-    public boolean removeFromCart(int cartItemId) {
-        return cartRepository.removeFromCart(cartItemId);
-    }
-    
-    @Override
-    public boolean clearCart(int userId) {
-        return cartRepository.clearCart(userId);
-    }
-    
-    @Override
-    public int getCartItemCount(int userId) {
-        return cartRepository.getCartItemCount(userId);
-    }
-} 
+public class CartService {
+	private final CartRepository cartRepository;
+
+	public CartService() {
+		this.cartRepository = new CartRepository();
+	}
+
+	public List<CartItem> getCartItems(int userId) {
+		return cartRepository.getCartItemsByUserId(userId);
+	}
+
+	public boolean addToCart(int userId, int plantId, int quantity) {
+		return cartRepository.addToCart(userId, plantId, quantity);
+	}
+
+	public boolean updateCartItemQuantity(int cartItemId, int quantity) {
+		return cartRepository.updateCartItemQuantity(cartItemId, quantity);
+	}
+
+	public boolean removeFromCart(int cartItemId) {
+		return cartRepository.removeFromCart(cartItemId);
+	}
+
+	public boolean clearCart(int userId) {
+		return cartRepository.clearCart(userId);
+	}
+
+	public BigDecimal calculateTotal(List<CartItem> cartItems) {
+		BigDecimal total = BigDecimal.ZERO;
+		for (CartItem item : cartItems) {
+			total = total.add(item.getPlant().getPrice().multiply(new BigDecimal(item.getQuantity())));
+		}
+		return total;
+	}
+}
