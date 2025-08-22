@@ -11,15 +11,16 @@ public class UserService {
 		this.userRepository = new UserRepository();
 	}
 
-	public User login(String username, String password) {
-		User user = userRepository.getUserByUsername(username);
-		if (user != null && BCrypt.checkpw(password, user.getPassword())) {
-			return user;
-		}
-		return null;
-	}
+    public User login(String username, String password) {
+        User user = userRepository.getUserByUsername(username);
+        if (user != null && password.equals(user.getPassword())) {
+            return user;
+        }
+        return null;
+    }
 
-	public boolean register(User user) {
+
+    public boolean register(User user) {
 		String hashedPassword = BCrypt.hashpw(user.getPassword(), BCrypt.gensalt());
 		user.setPassword(hashedPassword);
 		user.setRole("customer");

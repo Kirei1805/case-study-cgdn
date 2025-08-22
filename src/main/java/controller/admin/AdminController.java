@@ -37,16 +37,16 @@ public class AdminController extends HttpServlet {
 
             req.setAttribute("plants", plants);
 
-            req.getRequestDispatcher("/WEB-INF/views/admin/dashboard.jsp").forward(req, resp);
+            req.getRequestDispatcher("/WEB-INF/view/admin/dashboard.jsp").forward(req, resp);
 
         } else if (action.equals("edit")) {
             int id = Integer.parseInt(req.getParameter("id"));
             Plant plant = adminService.getPlantById(id);
             req.setAttribute("plant", plant);
-            req.getRequestDispatcher("/WEB-INF/views/admin/edit-plant.jsp").forward(req, resp);
+            req.getRequestDispatcher("/WEB-INF/view/admin/edit-plant.jsp").forward(req, resp);
 
         } else if (action.equals("add")) {
-            req.getRequestDispatcher("/WEB-INF/views/admin/add-plant.jsp").forward(req, resp);
+            req.getRequestDispatcher("/WEB-INF/view/admin/add-plant.jsp").forward(req, resp);
 
         } else if (action.equals("delete")) {
             int id = Integer.parseInt(req.getParameter("id"));

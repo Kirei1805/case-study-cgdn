@@ -1,4 +1,4 @@
--- CREATE DATABASE IF NOT EXISTS plant_shop;
+CREATE DATABASE IF NOT EXISTS plant_shop;
 USE plant_shop;
 
 -- 1. Bảng người dùng (admin và khách hàng)
@@ -169,7 +169,6 @@ VALUES
     (2, 2),
     (2, 3),
     (3, 1);
-
 
 
 
