@@ -1,6 +1,7 @@
 package controller.login;
 
-import service.UserService;
+import service.user.UserService;
+import service.user.UserServiceImpl;
 import model.User;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -15,7 +16,7 @@ public class RegisterController extends HttpServlet {
 
     @Override
     public void init() throws ServletException {
-        userService = new UserService();
+        userService = new UserServiceImpl();
     }
 
     @Override

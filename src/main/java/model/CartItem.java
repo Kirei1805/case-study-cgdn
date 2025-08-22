@@ -1,5 +1,7 @@
 package model;
 
+import java.math.BigDecimal;
+
 public class CartItem {
     private int id;
     private int userId;
@@ -30,4 +32,9 @@ public class CartItem {
 
     public Plant getPlant() { return plant; }
     public void setPlant(Plant plant) { this.plant = plant; }
+
+    public BigDecimal getSubtotal() {
+        if (plant == null || plant.getPrice() == null) return BigDecimal.ZERO;
+        return plant.getPrice().multiply(new BigDecimal(quantity));
+    }
 }

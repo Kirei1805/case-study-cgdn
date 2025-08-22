@@ -1,13 +1,16 @@
-package repository;
+package repository.wishlist;
 
 import model.WishlistItem;
 import model.Plant;
+import repository.db.DBRepository;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WishlistRepository {
+public class WishlistRepositoryImpl implements WishlistRepository {
+	
+	@Override
 	public List<WishlistItem> getWishlistByUser(int userId) {
 		List<WishlistItem> list = new ArrayList<>();
 		String sql = "SELECT w.*, p.name, p.image_url, p.price FROM wishlist w JOIN plants p ON w.plant_id = p.id WHERE w.user_id = ? ORDER BY w.created_at DESC";
@@ -36,6 +39,7 @@ public class WishlistRepository {
 		return list;
 	}
 
+	@Override
 	public boolean addToWishlist(int userId, int plantId) {
 		String sql = "INSERT INTO wishlist (user_id, plant_id) VALUES (?, ?) ON DUPLICATE KEY UPDATE user_id = user_id";
 		try (Connection conn = DBRepository.getConnection();
@@ -49,6 +53,7 @@ public class WishlistRepository {
 		return false;
 	}
 
+	@Override
 	public boolean removeFromWishlist(int userId, int plantId) {
 		String sql = "DELETE FROM wishlist WHERE user_id = ? AND plant_id = ?";
 		try (Connection conn = DBRepository.getConnection();
@@ -61,4 +66,38 @@ public class WishlistRepository {
 		}
 		return false;
 	}
+
+	@Override
+	public boolean isInWishlist(int userId, int plantId) {
+		String sql = "SELECT COUNT(*) FROM wishlist WHERE user_id = ? AND plant_id = ?";
+		try (Connection conn = DBRepository.getConnection();
+			 PreparedStatement stmt = conn.prepareStatement(sql)) {
+			stmt.setInt(1, userId);
+			stmt.setInt(2, plantId);
+			ResultSet rs = stmt.executeQuery();
+			if (rs.next()) {
+				return rs.getInt(1) > 0;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	@Override
+	public int getWishlistCount(int userId) {
+		String sql = "SELECT COUNT(*) FROM wishlist WHERE user_id = ?";
+		try (Connection conn = DBRepository.getConnection();
+			 PreparedStatement stmt = conn.prepareStatement(sql)) {
+			stmt.setInt(1, userId);
+			ResultSet rs = stmt.executeQuery();
+			if (rs.next()) {
+				return rs.getInt(1);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return 0;
+	}
 }
+

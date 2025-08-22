@@ -1,6 +1,7 @@
 package controller.plant;
 
-import service.PlantService;
+import service.plant.PlantService;
+import service.plant.PlantServiceImpl;
 import model.Plant;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -8,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
 @WebServlet("/plant-detail")
 public class PlantDetailController extends HttpServlet {
@@ -15,7 +17,7 @@ public class PlantDetailController extends HttpServlet {
 
     @Override
     public void init() throws ServletException {
-        plantService = new PlantService();
+        plantService = new PlantServiceImpl();
     }
 
     @Override
@@ -31,6 +33,8 @@ public class PlantDetailController extends HttpServlet {
                 
                 if (plant != null) {
                     request.setAttribute("plant", plant);
+                    List<Plant> related = plantService.getRelatedPlants(plant.getCategoryId(), plant.getId(), 8);
+                    request.setAttribute("relatedPlants", related);
                     request.getRequestDispatcher("/WEB-INF/view/plant/plant-detail.jsp").forward(request, response);
                 } else {
                     response.sendRedirect(request.getContextPath() + "/plants?error=notfound");
