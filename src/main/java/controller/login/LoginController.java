@@ -20,40 +20,46 @@ public class LoginController extends HttpServlet {
     }
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) 
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("user");
-        
+
         if (user != null) {
-            response.sendRedirect(request.getContextPath() + "/");
+            // Nếu đã đăng nhập thì điều hướng theo role
+            if ("admin".equalsIgnoreCase(user.getRole())) {
+                response.sendRedirect(request.getContextPath() + "/admin");
+            } else {
+                response.sendRedirect(request.getContextPath() + "/");
+            }
             return;
         }
-        
+
         request.getRequestDispatcher("/WEB-INF/view/login/login.jsp").forward(request, response);
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) 
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
         String username = request.getParameter("username");
         String password = request.getParameter("password");
-        
+
         if (username != null && password != null && !username.trim().isEmpty() && !password.trim().isEmpty()) {
             User user = userService.login(username.trim(), password);
-            
+
             if (user != null) {
                 HttpSession session = request.getSession();
                 session.setAttribute("user", user);
-                
-                String redirectUrl = request.getParameter("redirect");
-                if (redirectUrl != null && !redirectUrl.trim().isEmpty()) {
-                    response.sendRedirect(redirectUrl);
+
+                // Điều hướng theo role
+                if ("admin".equalsIgnoreCase(user.getRole())) {
+                    response.sendRedirect(request.getContextPath() + "/admin");
                 } else {
                     response.sendRedirect(request.getContextPath() + "/");
                 }
+
             } else {
                 request.setAttribute("error", "Tên đăng nhập hoặc mật khẩu không đúng");
                 request.setAttribute("username", username);

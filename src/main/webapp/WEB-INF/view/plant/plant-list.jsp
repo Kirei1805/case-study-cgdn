@@ -32,19 +32,19 @@
                             <option value="">Tất cả danh mục</option>
                             <c:forEach var="category" items="${categories}">
                                 <option value="${category.id}" ${selectedCategory == category.id ? 'selected' : ''}>
-                                    ${category.name}
+                                        ${category.name}
                                 </option>
                             </c:forEach>
                         </select>
                     </div>
                     <div class="col-md-3">
                         <label for="minPrice" class="form-label">Giá từ</label>
-                        <input type="number" class="form-control" id="minPrice" name="minPrice" 
+                        <input type="number" class="form-control" id="minPrice" name="minPrice"
                                placeholder="0" value="${minPrice}">
                     </div>
                     <div class="col-md-3">
                         <label for="maxPrice" class="form-label">Giá đến</label>
-                        <input type="number" class="form-control" id="maxPrice" name="maxPrice" 
+                        <input type="number" class="form-control" id="maxPrice" name="maxPrice"
                                placeholder="1000000" value="${maxPrice}">
                     </div>
                     <div class="col-md-3">
@@ -145,7 +145,7 @@
                             </div>
                         </div>
                         <div class="card-footer bg-transparent">
-                            <a href="${pageContext.request.contextPath}/plant-detail?id=${plant.id}" 
+                            <a href="${pageContext.request.contextPath}/plant-detail?id=${plant.id}"
                                class="btn btn-outline-primary btn-sm w-100">
                                 <i class="fas fa-eye me-1"></i>Xem chi tiết
                             </a>

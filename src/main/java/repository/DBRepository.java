@@ -5,7 +5,7 @@ import java.sql.*;
 public class DBRepository {
 	private static final String URL = "jdbc:mysql://localhost:3306/plant_shop?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=UTC";
 	private static final String USERNAME = "root";
-	private static final String PASSWORD = "loiphan123";
+	private static final String PASSWORD = "123456";
 
 	static {
 		try {
