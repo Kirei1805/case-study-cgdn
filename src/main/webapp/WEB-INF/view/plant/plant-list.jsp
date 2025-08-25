@@ -6,18 +6,78 @@
     <jsp:param name="title" value="Danh sách cây cảnh"/>
 </jsp:include>
 
-<!-- Hero Section -->
-<div class="bg-success bg-opacity-10 rounded-3 p-5 mb-4">
-    <div class="row align-items-center">
-        <div class="col-md-8">
-            <h1 class="display-5 fw-bold text-success">Khám phá thế giới cây cảnh</h1>
-            <p class="lead">Tìm kiếm và chọn lựa những cây cảnh đẹp nhất cho không gian sống của bạn</p>
+<!-- Carousel Section -->
+<div id="mainCarousel" class="carousel slide mb-4" data-bs-ride="carousel">
+    <div class="carousel-indicators">
+        <button type="button" data-bs-target="#mainCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+        <button type="button" data-bs-target="#mainCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+        <button type="button" data-bs-target="#mainCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+    </div>
+    <div class="carousel-inner">
+        <div class="carousel-item active">
+            <div class="carousel-image" style="background-image: url('https://images.unsplash.com/photo-1466692476868-aef1dfb1e735?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');">
+                <div class="carousel-overlay">
+                    <div class="container">
+                        <div class="row align-items-center min-vh-50">
+                            <div class="col-md-6">
+                                <h1 class="display-4 fw-bold text-white mb-3">Khám phá thế giới cây cảnh</h1>
+                                <p class="lead text-white mb-4">Tìm kiếm và chọn lựa những cây cảnh đẹp nhất cho không gian sống của bạn</p>
+                                <a href="#plants-section" class="btn btn-success btn-lg">
+                                    <i class="fas fa-seedling me-2"></i>Khám phá ngay
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="col-md-4 text-center">
-            <i class="fas fa-seedling fa-5x text-success"></i>
+        <div class="carousel-item">
+            <div class="carousel-image" style="background-image: url('https://images.unsplash.com/photo-1485955900006-10f4d324d411?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');">
+                <div class="carousel-overlay">
+                    <div class="container">
+                        <div class="row align-items-center min-vh-50">
+                            <div class="col-md-6">
+                                <h1 class="display-4 fw-bold text-white mb-3">Cây cảnh văn phòng</h1>
+                                <p class="lead text-white mb-4">Tạo không gian làm việc xanh mát và thư giãn với những cây cảnh phù hợp</p>
+                                <a href="#plants-section" class="btn btn-success btn-lg">
+                                    <i class="fas fa-building me-2"></i>Xem cây văn phòng
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="carousel-item">
+            <div class="carousel-image" style="background-image: url('https://images.unsplash.com/photo-1416879595882-3373a0480b5b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');">
+                <div class="carousel-overlay">
+                    <div class="container">
+                        <div class="row align-items-center min-vh-50">
+                            <div class="col-md-6">
+                                <h1 class="display-4 fw-bold text-white mb-3">Cây cảnh trang trí nhà</h1>
+                                <p class="lead text-white mb-4">Biến ngôi nhà thành không gian sống xanh với những cây cảnh đẹp mắt</p>
+                                <a href="#plants-section" class="btn btn-success btn-lg">
+                                    <i class="fas fa-home me-2"></i>Xem cây trang trí
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#mainCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#mainCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
 </div>
+
+<!-- Plants Section -->
+<div id="plants-section">
 
 <!-- Filter Section -->
 <div class="row mb-4">

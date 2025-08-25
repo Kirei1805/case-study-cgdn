@@ -1,7 +1,6 @@
-package repository;
+package repository.admin;
 
 import model.Plant;
-import model.Order;
 import repository.db.DBRepository;
 
 import java.sql.*;

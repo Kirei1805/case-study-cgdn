@@ -1,8 +1,7 @@
-package service;
+package service.admin;
 
 import model.Plant;
-import model.Order;
-import repository.AdminRepository;
+import repository.admin.AdminRepository;
 
 import java.util.List;
 

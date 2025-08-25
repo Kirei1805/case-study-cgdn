@@ -88,7 +88,7 @@
                                 <div class="col-md-2">
                                     <form action="${pageContext.request.contextPath}/cart" method="POST" class="d-flex align-items-center">
                                         <input type="hidden" name="action" value="update">
-                                        <input type="hidden" name="cartItemId" value="${item.id}">
+                                        <input type="hidden" name="plantId" value="${item.plant.id}">
                                         <input type="number" class="form-control form-control-sm" name="quantity" 
                                                value="${item.quantity}" min="1" max="${item.plant.stock}" style="width: 60px;">
                                         <button type="submit" class="btn btn-outline-primary btn-sm ms-2">
@@ -103,7 +103,7 @@
                                         </span>
                                         <form action="${pageContext.request.contextPath}/cart" method="POST" class="mt-1">
                                             <input type="hidden" name="action" value="remove">
-                                            <input type="hidden" name="cartItemId" value="${item.id}">
+                                            <input type="hidden" name="plantId" value="${item.plant.id}">
                                             <button type="submit" class="btn btn-outline-danger btn-sm" 
                                                     onclick="return confirm('Bạn có chắc muốn xóa sản phẩm này?')">
                                                 <i class="fas fa-trash me-1"></i>Xóa
