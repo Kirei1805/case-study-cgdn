@@ -2,6 +2,7 @@ package repository;
 
 import model.Plant;
 import model.Order;
+import repository.db.DBRepository;
 
 import java.sql.*;
 import java.util.ArrayList;

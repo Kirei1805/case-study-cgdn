@@ -1,7 +1,9 @@
 package controller.plant;
 
-import service.PlantService;
-import service.CategoryService;
+import service.plant.PlantService;
+import service.plant.PlantServiceImpl;
+import service.category.CategoryService;
+import service.category.CategoryServiceImpl;
 import model.Plant;
 import model.Category;
 import javax.servlet.ServletException;
@@ -20,8 +22,8 @@ public class PlantListController extends HttpServlet {
 
     @Override
     public void init() throws ServletException {
-        plantService = new PlantService();
-        categoryService = new CategoryService();
+        plantService = new PlantServiceImpl();
+        categoryService = new CategoryServiceImpl();
     }
 
     @Override

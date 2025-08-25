@@ -1,6 +1,7 @@
 package controller.cart;
 
-import service.CartService;
+import service.cart.CartService;
+import service.cart.CartServiceImpl;
 import model.CartItem;
 import model.User;
 import javax.servlet.ServletException;
@@ -11,15 +12,14 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
-import java.math.BigDecimal;
 
-@WebServlet("/cart/*")
+@WebServlet(urlPatterns = {"/cart", "/cart/*"})
 public class CartController extends HttpServlet {
     private CartService cartService;
 
     @Override
     public void init() throws ServletException {
-        cartService = new CartService();
+        cartService = new CartServiceImpl();
     }
 
     @Override
@@ -35,7 +35,7 @@ public class CartController extends HttpServlet {
         }
         
         List<CartItem> cartItems = cartService.getCartItems(user.getId());
-        BigDecimal total = cartService.calculateTotal(cartItems);
+        double total = cartService.getCartTotal(user.getId());
         
         request.setAttribute("cartItems", cartItems);
         request.setAttribute("total", total);
@@ -96,19 +96,22 @@ public class CartController extends HttpServlet {
     private void updateCartItem(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
         
-        String cartItemId = request.getParameter("cartItemId");
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("user");
+        
+        String plantId = request.getParameter("plantId");
         String quantity = request.getParameter("quantity");
         
-        if (cartItemId != null && quantity != null) {
+        if (plantId != null && quantity != null && user != null) {
             try {
-                int id = Integer.parseInt(cartItemId);
+                int id = Integer.parseInt(plantId);
                 int qty = Integer.parseInt(quantity);
                 
                 if (qty > 0) {
-                    cartService.updateCartItemQuantity(id, qty);
+                    cartService.updateQuantity(user.getId(), id, qty);
                     response.sendRedirect(request.getContextPath() + "/cart?success=updated");
                 } else {
-                    cartService.removeFromCart(id);
+                    cartService.removeFromCart(user.getId(), id);
                     response.sendRedirect(request.getContextPath() + "/cart?success=removed");
                 }
             } catch (NumberFormatException e) {
@@ -122,12 +125,15 @@ public class CartController extends HttpServlet {
     private void removeFromCart(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
         
-        String cartItemId = request.getParameter("cartItemId");
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("user");
         
-        if (cartItemId != null) {
+        String plantId = request.getParameter("plantId");
+        
+        if (plantId != null && user != null) {
             try {
-                int id = Integer.parseInt(cartItemId);
-                cartService.removeFromCart(id);
+                int id = Integer.parseInt(plantId);
+                cartService.removeFromCart(user.getId(), id);
                 response.sendRedirect(request.getContextPath() + "/cart?success=removed");
             } catch (NumberFormatException e) {
                 response.sendRedirect(request.getContextPath() + "/cart?error=invalid_input");

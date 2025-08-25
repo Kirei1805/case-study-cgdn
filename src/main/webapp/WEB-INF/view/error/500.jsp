@@ -11,9 +11,18 @@
     </div>
     <h1 class="display-1 text-muted">500</h1>
     <h2 class="mb-4">Lỗi máy chủ</h2>
+    
+    <c:if test="${not empty errorMessage}">
+        <div class="alert alert-danger mx-auto" style="max-width: 600px;">
+            <h5>Chi tiết lỗi:</h5>
+            <p class="mb-0">${errorMessage}</p>
+        </div>
+    </c:if>
+    
     <p class="lead text-muted mb-4">
         Đã xảy ra lỗi trong quá trình xử lý yêu cầu của bạn. Vui lòng thử lại sau.
     </p>
+    
     <div class="d-flex justify-content-center gap-3">
         <a href="${pageContext.request.contextPath}/" class="btn btn-success">
             <i class="fas fa-home me-2"></i>Về trang chủ

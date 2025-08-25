@@ -1,87 +1,63 @@
 package controller.admin;
 
-import model.Plant;
-import model.Order;
 import model.User;
-import service.AdminService;
+import service.order.OrderService;
+import service.order.OrderServiceImpl;
+import service.plant.PlantService;
+import service.plant.PlantServiceImpl;
+import service.user.UserService;
+import service.user.UserServiceImpl;
 
-import javax.servlet.*;
+import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.*;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.util.List;
 
 @WebServlet("/admin")
 public class AdminController extends HttpServlet {
-    private AdminService adminService = new AdminService();
+    private UserService userService;
+    private OrderService orderService;
+    private PlantService plantService;
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        HttpSession session = req.getSession(false);
-        if (session == null || session.getAttribute("user") == null) {
-            resp.sendRedirect(req.getContextPath() + "/login");
-            return;
-        }
+    public void init() throws ServletException {
+        userService = new UserServiceImpl();
+        orderService = new OrderServiceImpl();
+        plantService = new PlantServiceImpl();
+    }
 
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        HttpSession session = request.getSession();
         User user = (User) session.getAttribute("user");
-        if (!"admin".equalsIgnoreCase(user.getRole())) {
-            resp.sendRedirect(req.getContextPath() + "/");
+
+        if (user == null || !userService.isAdmin(user)) {
+            response.sendRedirect(request.getContextPath() + "/login");
             return;
         }
-        String action = req.getParameter("action");
 
-        if (action == null) {
+        // ✅ Lấy dữ liệu từ DB qua service
+        int totalOrders = orderService.getAllOrders().size();
+        int totalUsers = userService.getAllUsers().size();
+        int totalProducts = plantService.getAllPlants().size();
+        long newOrders = orderService.getAllOrders()
+                .stream()
+                .filter(o -> "pending".equals(o.getStatus()))
+                .count();
 
-            List<Plant> plants = adminService.getAllPlants();
+        // ✅ Đẩy sang JSP
+        request.setAttribute("adminUser", user);
+        request.setAttribute("totalOrders", totalOrders);
+        request.setAttribute("totalUsers", totalUsers);
+        request.setAttribute("totalProducts", totalProducts);
+        request.setAttribute("newOrders", newOrders);
 
-            req.setAttribute("plants", plants);
-
-            req.getRequestDispatcher("/WEB-INF/view/admin/dashboard.jsp").forward(req, resp);
-
-        } else if (action.equals("edit")) {
-            int id = Integer.parseInt(req.getParameter("id"));
-            Plant plant = adminService.getPlantById(id);
-            req.setAttribute("plant", plant);
-            req.getRequestDispatcher("/WEB-INF/view/admin/edit-plant.jsp").forward(req, resp);
-
-        } else if (action.equals("add")) {
-            req.getRequestDispatcher("/WEB-INF/view/admin/add-plant.jsp").forward(req, resp);
-
-        } else if (action.equals("delete")) {
-            int id = Integer.parseInt(req.getParameter("id"));
-            adminService.deletePlant(id);
-            resp.sendRedirect(req.getContextPath() + "/admin");
-        }
-    }
-
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String action = req.getParameter("action");
-
-        if ("add".equals(action)) {
-            Plant plant = buildPlantFromRequest(req);
-            adminService.addPlant(plant);
-            resp.sendRedirect(req.getContextPath() + "/admin");
-
-        } else if ("update".equals(action)) {
-            Plant plant = buildPlantFromRequest(req);
-            plant.setId(Integer.parseInt(req.getParameter("id")));
-            adminService.updatePlant(plant);
-            resp.sendRedirect(req.getContextPath() + "/admin");
-        }
-    }
-
-    private Plant buildPlantFromRequest(HttpServletRequest req) {
-        Plant plant = new Plant();
-        plant.setName(req.getParameter("name"));
-        plant.setPrice(new BigDecimal(req.getParameter("price")));
-        plant.setImageUrl(req.getParameter("imageUrl"));
-        plant.setDescription(req.getParameter("description"));
-        plant.setStock(Integer.parseInt(req.getParameter("stock")));
-        plant.setRatingAvg(Float.parseFloat(req.getParameter("ratingAvg")));
-        plant.setCategoryId(Integer.parseInt(req.getParameter("categoryId")));
-        plant.setActive("on".equals(req.getParameter("isActive")));
-        return plant;
+        request.getRequestDispatcher("/WEB-INF/view/admin/admin.jsp").forward(request, response);
     }
 }
+

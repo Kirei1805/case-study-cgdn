@@ -135,19 +135,33 @@
 <div class="row mt-5">
     <div class="col-12">
         <h3 class="mb-4">Sản phẩm liên quan</h3>
-        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
-            <!-- Placeholder for related products -->
-            <div class="col">
-                <div class="card">
-                    <img src="https://via.placeholder.com/300x200?text=Sản+phẩm+liên+quan" class="card-img-top plant-image" alt="Related Product">
-                    <div class="card-body">
-                        <h6 class="card-title">Cây cảnh liên quan</h6>
-                        <p class="price">150,000 VNĐ</p>
-                        <a href="#" class="btn btn-outline-success btn-sm">Xem chi tiết</a>
-                    </div>
+        <c:choose>
+            <c:when test="${empty relatedPlants}">
+                <p class="text-muted">Chưa có sản phẩm liên quan.</p>
+            </c:when>
+            <c:otherwise>
+                <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
+                    <c:forEach var="p" items="${relatedPlants}">
+                        <div class="col">
+                            <div class="card h-100">
+                                <img src="${p.imageUrl}" class="card-img-top plant-image" alt="${p.name}"
+                                     onerror="this.src='https://via.placeholder.com/300x200?text=Không+có+ảnh'">
+                                <div class="card-body d-flex flex-column">
+                                    <h6 class="card-title">${p.name}</h6>
+                                    <p class="text-muted small mb-2">${p.category.name}</p>
+                                    <div class="mt-auto d-flex justify-content-between align-items-center">
+                                        <span class="price"><fmt:formatNumber value="${p.price}" type="currency" currencySymbol="VNĐ"/></span>
+                                        <a href="${pageContext.request.contextPath}/plant-detail?id=${p.id}" class="btn btn-outline-primary btn-sm">
+                                            <i class="fas fa-eye me-1"></i>Chi tiết
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </c:forEach>
                 </div>
-            </div>
-        </div>
+            </c:otherwise>
+        </c:choose>
     </div>
 </div>
 

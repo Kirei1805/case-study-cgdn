@@ -11,6 +11,8 @@ public class Order {
     private BigDecimal totalAmount;
     private String status;
     private LocalDateTime orderDate;
+    private String customerName;
+    private String customerUsername;
     private User user;
     private List<OrderItem> orderItems;
 
@@ -43,6 +45,22 @@ public class Order {
 
     public LocalDateTime getOrderDate() { return orderDate; }
     public void setOrderDate(LocalDateTime orderDate) { this.orderDate = orderDate; }
+
+    public String getCustomerName() {
+        return customerName;
+    }
+
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
+    }
+
+    public String getCustomerUsername() {
+        return customerUsername;
+    }
+
+    public void setCustomerUsername(String customerUsername) {
+        this.customerUsername = customerUsername;
+    }
 
     public User getUser() { return user; }
     public void setUser(User user) { this.user = user; }

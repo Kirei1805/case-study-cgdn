@@ -99,8 +99,7 @@
                                 <div class="col-md-2">
                                     <div class="d-flex flex-column">
                                         <span class="price fw-bold">
-                                            <fmt:formatNumber value="${item.plant.price.multiply(new java.math.BigDecimal(item.quantity))}" 
-                                                            type="currency" currencySymbol="VNĐ"/>
+                                            <fmt:formatNumber value="${item.subtotal}" type="currency" currencySymbol="VNĐ"/>
                                         </span>
                                         <form action="${pageContext.request.contextPath}/cart" method="POST" class="mt-1">
                                             <input type="hidden" name="action" value="remove">

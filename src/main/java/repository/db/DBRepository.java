@@ -1,4 +1,4 @@
-package repository;
+package repository.db;
 
 import java.sql.*;
 
