@@ -17,12 +17,15 @@
     <div class="card mb-4">
         <div class="card-body">
             <p><strong>Khách hàng:</strong> ${order.customerName} (${order.customerUsername})</p>
-            <p><strong>Ngày đặt:</strong> <fmt:formatDate value="${order.orderDate}" pattern="dd/MM/yyyy HH:mm"/></p>
+            <p><strong>Ngày đặt:</strong>
+                <fmt:formatDate value="${order.orderDate}" pattern="dd/MM/yyyy HH:mm"/>
+            </p>
             <p><strong>Trạng thái hiện tại:</strong>
                 <span class="badge
-                    ${order.status eq 'completed' ? 'bg-success' :
-                      order.status eq 'pending' ? 'bg-warning' :
-                      order.status eq 'shipped' ? 'bg-primary' : 'bg-secondary'}">
+                    ${order.status eq 'pending' ? 'bg-warning' :
+                      order.status eq 'processing' ? 'bg-info' :
+                      order.status eq 'shipped' ? 'bg-primary' :
+                      order.status eq 'cancelled' ? 'bg-danger' : 'bg-secondary'}">
                     ${order.status}
                 </span>
             </p>
@@ -42,8 +45,8 @@
                 <div class="col-md-6">
                     <select name="status" class="form-select" required>
                         <option value="pending" ${order.status eq 'pending' ? 'selected' : ''}>Chờ xử lý</option>
+                        <option value="processing" ${order.status eq 'processing' ? 'selected' : ''}>Đang xử lý</option>
                         <option value="shipped" ${order.status eq 'shipped' ? 'selected' : ''}>Đang giao</option>
-                        <option value="completed" ${order.status eq 'completed' ? 'selected' : ''}>Hoàn thành</option>
                         <option value="cancelled" ${order.status eq 'cancelled' ? 'selected' : ''}>Đã hủy</option>
                     </select>
                 </div>

@@ -38,9 +38,10 @@
                     <td><fmt:formatNumber value="${o.totalAmount}" type="currency" currencySymbol="VNĐ"/></td>
                     <td>
                         <span class="badge
-                            ${o.status eq 'completed' ? 'bg-success' :
-                              o.status eq 'pending' ? 'bg-warning' :
-                              o.status eq 'shipped' ? 'bg-primary' : 'bg-secondary'}">
+                            ${o.status eq 'pending' ? 'bg-warning' :
+                              o.status eq 'processing' ? 'bg-info' :
+                              o.status eq 'shipped' ? 'bg-primary' :
+                              o.status eq 'cancelled' ? 'bg-danger' : 'bg-secondary'}">
                                 ${o.status}
                         </span>
                     </td>

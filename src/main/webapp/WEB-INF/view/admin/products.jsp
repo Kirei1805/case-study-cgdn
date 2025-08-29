@@ -9,7 +9,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        .product-card { border:none; border-radius:15px; box-shadow:0 4px 6px rgba(0,0,0,0.1); }
+        .product-card { border:none; border-radius:15px; box-shadow:0 4px 6px rgba(0,0,0,0.1); transition:0.3s; }
         .product-card:hover { transform: translateY(-5px); }
         .product-image { height:200px; object-fit:cover; border-radius:10px; }
     </style>
@@ -22,6 +22,18 @@
             <i class="fas fa-plus me-2"></i>Thêm sản phẩm mới
         </button>
     </div>
+
+    <!-- Form tìm kiếm -->
+    <form action="${pageContext.request.contextPath}/admin/products" method="get" class="row mb-4">
+        <input type="hidden" name="action" value="search"/>
+        <div class="col-md-6">
+            <input type="text" name="keyword" class="form-control" placeholder="Nhập tên sản phẩm..."
+                   value="${param.keyword != null ? param.keyword : ''}">
+        </div>
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-primary">Tìm kiếm</button>
+        </div>
+    </form>
 
     <!-- Danh sách sản phẩm -->
     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
@@ -45,12 +57,12 @@
                         <div class="d-flex justify-content-between align-items-center">
                             <small class="text-muted">Còn: ${p.stock}</small>
                             <div class="btn-group btn-group-sm">
-                                <!-- Nút Edit -->
+                                <!-- Edit -->
                                 <button type="button" class="btn btn-outline-primary"
                                         data-bs-toggle="modal" data-bs-target="#editProductModal${p.id}">
                                     <i class="fas fa-edit"></i>
                                 </button>
-                                <!-- Nút Delete -->
+                                <!-- Delete -->
                                 <a href="${pageContext.request.contextPath}/admin/products?action=delete&id=${p.id}"
                                    class="btn btn-outline-danger"
                                    onclick="return confirm('Bạn có chắc muốn xóa sản phẩm này?')">
@@ -135,7 +147,7 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <form action="${pageContext.request.contextPath}/admin/products" method="post">
-                <input type="hidden" name="action" value="insert"/>
+                <input type="hidden" name="action" value="add"/>
                 <div class="modal-header">
                     <h5 class="modal-title">Thêm sản phẩm mới</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>

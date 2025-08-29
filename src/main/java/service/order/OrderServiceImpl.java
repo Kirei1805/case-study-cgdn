@@ -2,8 +2,10 @@ package service.order;
 
 import model.Order;
 import model.OrderItem;
+import model.Plant;
 import repository.order.OrderRepository;
 import repository.order.OrderRepositoryImpl;
+
 import java.util.List;
 
 public class OrderServiceImpl implements OrderService {
@@ -43,4 +45,7 @@ public class OrderServiceImpl implements OrderService {
     public List<Order> getOrdersByUser(int userId) {
         return orderRepository.findByUser(userId);
     }
+
+
+
 }
