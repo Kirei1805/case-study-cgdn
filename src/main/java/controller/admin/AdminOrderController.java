@@ -29,6 +29,7 @@ public class AdminOrderController extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
 
+        // Kiểm tra quyền admin
         HttpSession session = req.getSession();
         User user = (User) session.getAttribute("user");
 
@@ -40,39 +41,53 @@ public class AdminOrderController extends HttpServlet {
         String action = req.getParameter("action");
         if (action == null) action = "list";
 
-        switch (action) {
-            case "detail":
-                int orderId = Integer.parseInt(req.getParameter("id"));
-                Order order = orderService.getOrderById(orderId);
-                List<OrderItem> items = orderService.getOrderItems(orderId);
+        try {
+            switch (action) {
+                case "detail":
+                    showOrderDetail(req, resp);
+                    break;
+                case "delete":
+                    deleteOrder(req, resp);
+                    break;
+                default:
+                    showOrderList(req, resp);
+                    break;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, 
+                "Lỗi trong quá trình xử lý: " + e.getMessage());
+        }
+    }
 
-                if (order == null) {
-                    resp.sendRedirect(req.getContextPath() + "/admin/orders");
-                    return;
-                }
+    private void showOrderList(HttpServletRequest req, HttpServletResponse resp) 
+            throws ServletException, IOException {
+        List<Order> orders = orderService.getAllOrders();
+        req.setAttribute("orders", orders);
+        req.getRequestDispatcher("/WEB-INF/view/admin/orders.jsp").forward(req, resp);
+    }
 
-                req.setAttribute("order", order);
-                req.setAttribute("orderItems", items);
-                req.getRequestDispatcher("/WEB-INF/view/admin/order-detail.jsp")
-                        .forward(req, resp);
-                System.out.println("OrderId param = " + orderId);
-                System.out.println("Order = " + order);
-                System.out.println("Items = " + items.size());
-                break;
+    private void showOrderDetail(HttpServletRequest req, HttpServletResponse resp) 
+            throws ServletException, IOException {
+        int orderId = Integer.parseInt(req.getParameter("id"));
+        Order order = orderService.getOrderById(orderId);
+        List<OrderItem> items = orderService.getOrderItems(orderId);
 
-            case "delete":
-                orderId = Integer.parseInt(req.getParameter("id"));
-                orderService.deleteOrder(orderId);
-                resp.sendRedirect(req.getContextPath() + "/admin/orders");
-                break;
-
-            default:
-                List<Order> orders = orderService.getAllOrders();
-                req.setAttribute("orders", orders);
-                req.getRequestDispatcher("/WEB-INF/view/admin/orders.jsp")
-                        .forward(req, resp);
+        if (order == null) {
+            resp.sendRedirect(req.getContextPath() + "/admin/orders");
+            return;
         }
 
+        req.setAttribute("order", order);
+        req.setAttribute("orderItems", items);
+        req.getRequestDispatcher("/WEB-INF/view/admin/order-detail.jsp").forward(req, resp);
+    }
+
+    private void deleteOrder(HttpServletRequest req, HttpServletResponse resp) 
+            throws IOException {
+        int orderId = Integer.parseInt(req.getParameter("id"));
+        orderService.deleteOrder(orderId);
+        resp.sendRedirect(req.getContextPath() + "/admin/orders");
     }
 
     @Override
@@ -82,14 +97,18 @@ public class AdminOrderController extends HttpServlet {
         String action = req.getParameter("action");
 
         if ("updateStatus".equals(action)) {
-            int orderId = Integer.parseInt(req.getParameter("id"));
-            String status = req.getParameter("status");
-            orderService.updateOrderStatus(orderId, status);
-            resp.sendRedirect(req.getContextPath() + "/admin/orders?action=detail&id=" + orderId);
+            updateOrderStatus(req, resp);
         } else {
             resp.sendRedirect(req.getContextPath() + "/admin/orders");
         }
-
     }
 
+    private void updateOrderStatus(HttpServletRequest req, HttpServletResponse resp) 
+            throws IOException {
+        int orderId = Integer.parseInt(req.getParameter("id"));
+        String status = req.getParameter("status");
+        
+        orderService.updateOrderStatus(orderId, status);
+        resp.sendRedirect(req.getContextPath() + "/admin/orders?action=detail&id=" + orderId);
+    }
 }

@@ -6,3 +6,4 @@ public interface EmailService {
     boolean sendOrderConfirmationEmail(String toEmail, String userName, String orderId, double totalAmount);
 }
 
+

@@ -6,6 +6,8 @@ import service.order.OrderService;
 import service.order.OrderServiceImpl;
 import service.user.UserService;
 import service.user.UserServiceImpl;
+import service.plant.PlantService;
+import service.plant.PlantServiceImpl;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -17,11 +19,13 @@ import java.util.List;
 public class AdminDashboardController extends HttpServlet {
     private UserService userService;
     private OrderService orderService;
+    private PlantService plantService;
 
     @Override
     public void init() throws ServletException {
         userService = new UserServiceImpl();
         orderService = new OrderServiceImpl();
+        plantService = new PlantServiceImpl();
     }
 
     @Override
@@ -42,7 +46,7 @@ public class AdminDashboardController extends HttpServlet {
         req.setAttribute("totalUsers", userService.getAllUsers().size());
         req.setAttribute("pendingOrders", recentOrders.stream()
                 .filter(o -> "pending".equals(o.getStatus())).count());
-        req.setAttribute("totalProducts", 13); // TODO: lấy từ ProductService
+        req.setAttribute("totalProducts", plantService.getAllPlants().size());
 
         req.setAttribute("adminUser", user);
         req.getRequestDispatcher("/WEB-INF/view/admin/dashboard.jsp").forward(req, resp);

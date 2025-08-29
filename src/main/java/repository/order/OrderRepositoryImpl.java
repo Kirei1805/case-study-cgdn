@@ -13,8 +13,8 @@ public class OrderRepositoryImpl implements OrderRepository {
     @Override
     public List<Order> findAll() {
         List<Order> list = new ArrayList<>();
-        String sql = "SELECT o.id, o.total_amount, o.status, o.order_date, u.full_name, u.username " +
-                "FROM orders o JOIN users u ON o.user_id = u.id ORDER BY o.order_date DESC";
+        String sql = "SELECT o.id, o.total_amount, o.status, u.full_name, u.username " +
+                "FROM orders o JOIN users u ON o.user_id = u.id ORDER BY o.id DESC";
         try (Connection conn = DBRepository.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
@@ -23,7 +23,11 @@ public class OrderRepositoryImpl implements OrderRepository {
                 o.setId(rs.getInt("id"));
                 o.setTotalAmount(rs.getBigDecimal("total_amount"));
                 o.setStatus(rs.getString("status"));
-                o.setOrderDate(rs.getTimestamp("order_date").toLocalDateTime());
+                // Tạm thời bỏ qua order_date để test
+                // Timestamp timestamp = rs.getTimestamp("order_date");
+                // if (timestamp != null) {
+                //     o.setOrderDate(timestamp.toLocalDateTime());
+                // }
                 o.setCustomerName(rs.getString("full_name"));
                 o.setCustomerUsername(rs.getString("username"));
                 list.add(o);
@@ -34,7 +38,7 @@ public class OrderRepositoryImpl implements OrderRepository {
 
     @Override
     public Order findById(int id) {
-        String sql = "SELECT o.id, o.user_id, o.total_amount, o.status, o.order_date, u.full_name, u.username " +
+        String sql = "SELECT o.id, o.user_id, o.total_amount, o.status, u.full_name, u.username " +
                 "FROM orders o JOIN users u ON o.user_id = u.id WHERE o.id = ?";
         try (Connection conn = DBRepository.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -46,7 +50,11 @@ public class OrderRepositoryImpl implements OrderRepository {
                 o.setUserId(rs.getInt("user_id"));
                 o.setTotalAmount(rs.getBigDecimal("total_amount"));
                 o.setStatus(rs.getString("status"));
-                o.setOrderDate(rs.getTimestamp("order_date").toLocalDateTime());
+                // Tạm thời bỏ qua order_date để test
+                // Timestamp timestamp = rs.getTimestamp("order_date");
+                // if (timestamp != null) {
+                //     o.setOrderDate(timestamp.toLocalDateTime());
+                // }
                 o.setCustomerName(rs.getString("full_name"));
                 o.setCustomerUsername(rs.getString("username"));
                 return o;
@@ -216,7 +224,7 @@ public class OrderRepositoryImpl implements OrderRepository {
     @Override
     public List<Order> findByUser(int userId) {
         List<Order> list = new ArrayList<>();
-        String sql = "SELECT id, user_id, total_amount, status, order_date FROM orders WHERE user_id = ? ORDER BY order_date DESC";
+        String sql = "SELECT id, user_id, total_amount, status FROM orders WHERE user_id = ? ORDER BY id DESC";
         try (Connection conn = DBRepository.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, userId);
@@ -227,7 +235,11 @@ public class OrderRepositoryImpl implements OrderRepository {
                 o.setUserId(rs.getInt("user_id"));
                 o.setTotalAmount(rs.getBigDecimal("total_amount"));
                 o.setStatus(rs.getString("status"));
-                o.setOrderDate(rs.getTimestamp("order_date").toLocalDateTime());
+                // Tạm thời bỏ qua order_date để test
+                // Timestamp timestamp = rs.getTimestamp("order_date");
+                // if (timestamp != null) {
+                //     o.setOrderDate(timestamp.toLocalDateTime());
+                // }
                 list.add(o);
             }
         } catch (SQLException e) { e.printStackTrace(); }

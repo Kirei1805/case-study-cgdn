@@ -16,6 +16,15 @@ public class DBRepository {
 	}
 
 	public static Connection getConnection() throws SQLException {
-		return DriverManager.getConnection(URL, USERNAME, PASSWORD);
+		try {
+			System.out.println("DEBUG: Attempting database connection...");
+			Connection conn = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+			System.out.println("DEBUG: Database connection successful!");
+			return conn;
+		} catch (SQLException e) {
+			System.out.println("DEBUG: Database connection failed:");
+			e.printStackTrace();
+			throw e;
+		}
 	}
 } 

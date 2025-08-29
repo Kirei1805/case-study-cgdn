@@ -9,6 +9,10 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
+        .sidebar { min-height: 100vh; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .sidebar .nav-link { color: rgba(255, 255, 255, 0.8); transition: all 0.3s; border-radius: 8px; margin: 2px 0; }
+        .sidebar .nav-link:hover, .sidebar .nav-link.active { color: #fff; background: rgba(255, 255, 255, 0.1); }
+        .main-content { background-color: #f8f9fa; }
         .product-card { border:none; border-radius:15px; box-shadow:0 4px 6px rgba(0,0,0,0.1); }
         .product-card:hover { transform: translateY(-5px); }
         .product-image { height:200px; object-fit:cover; border-radius:10px; }
@@ -16,12 +20,31 @@
 </head>
 <body>
 <div class="container-fluid">
-    <div class="d-flex justify-content-between align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <h1 class="h2">Quản lý sản phẩm</h1>
-        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addProductModal">
-            <i class="fas fa-plus me-2"></i>Thêm sản phẩm mới
-        </button>
-    </div>
+    <div class="row">
+        <!-- Sidebar -->
+        <nav class="col-md-3 col-lg-2 d-md-block sidebar collapse">
+            <div class="position-sticky pt-3 text-center text-white">
+                <i class="fas fa-seedling fa-2x mb-2"></i>
+                <h5>Plant Shop Admin</h5>
+                <small class="text-white-50">Quản lý hệ thống</small>
+                <ul class="nav flex-column mt-3">
+                    <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/admin"><i class="fas fa-tachometer-alt me-2"></i>Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/admin/orders"><i class="fas fa-shopping-cart me-2"></i>Quản lý đơn hàng</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="${pageContext.request.contextPath}/admin/products"><i class="fas fa-seedling me-2"></i>Quản lý sản phẩm</a></li>
+                    <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/admin/reports"><i class="fas fa-chart-bar me-2"></i>Báo cáo</a></li>
+                    <li class="nav-item mt-4"><a class="nav-link" href="${pageContext.request.contextPath}/logout"><i class="fas fa-sign-out-alt me-2"></i>Đăng xuất</a></li>
+                </ul>
+            </div>
+        </nav>
+
+        <!-- Main content -->
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 main-content">
+            <div class="d-flex justify-content-between align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <h1 class="h2">Quản lý sản phẩm</h1>
+                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addProductModal">
+                    <i class="fas fa-plus me-2"></i>Thêm sản phẩm mới
+                </button>
+            </div>
 
     <!-- Danh sách sản phẩm -->
     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
@@ -128,6 +151,8 @@
             </div>
         </c:forEach>
     </div>
+        </main>
+    </div>
 </div>
 
 <!-- Modal Add -->
@@ -135,7 +160,7 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <form action="${pageContext.request.contextPath}/admin/products" method="post">
-                <input type="hidden" name="action" value="insert"/>
+                <input type="hidden" name="action" value="add"/>
                 <div class="modal-header">
                     <h5 class="modal-title">Thêm sản phẩm mới</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
