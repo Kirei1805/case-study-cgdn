@@ -11,5 +11,6 @@ public interface OrderRepository {
     boolean updateStatus(int id, String status);
     boolean delete(int id);
     boolean checkoutFromCart(int userId, int addressId);
+    int checkoutFromCartAndGetOrderId(int userId, int addressId);
     List<Order> findByUser(int userId);
 }

@@ -115,6 +115,49 @@
     </div>
 
     <div class="col-lg-4">
+        <!-- Order Summary -->
+        <div class="card mb-3">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-shopping-cart me-2"></i>Đơn hàng của bạn</h5>
+            </div>
+            <div class="card-body">
+                <c:forEach var="item" items="${cartItems}">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <div class="d-flex align-items-center">
+                            <img src="${item.plant.imageUrl}" class="me-2" style="width: 40px; height: 40px; object-fit: cover; border-radius: 5px;" 
+                                 alt="${item.plant.name}" onerror="this.src='https://via.placeholder.com/40x40?text=No+Image'">
+                            <div>
+                                <div class="fw-semibold small">${item.plant.name}</div>
+                                <div class="text-muted small">SL: ${item.quantity}</div>
+                            </div>
+                        </div>
+                        <div class="text-end">
+                            <div class="fw-semibold">
+                                <fmt:formatNumber value="${item.subtotal}" type="currency" currencySymbol="VNĐ"/>
+                            </div>
+                        </div>
+                    </div>
+                </c:forEach>
+                <hr>
+                <div class="d-flex justify-content-between">
+                    <span>Tạm tính:</span>
+                    <span><fmt:formatNumber value="${total}" type="currency" currencySymbol="VNĐ"/></span>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <span>Phí vận chuyển:</span>
+                    <span class="text-success">Miễn phí</span>
+                </div>
+                <hr>
+                <div class="d-flex justify-content-between fw-bold fs-5">
+                    <span>Tổng cộng:</span>
+                    <span class="text-success">
+                        <fmt:formatNumber value="${total}" type="currency" currencySymbol="VNĐ"/>
+                    </span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Notes -->
         <div class="card">
             <div class="card-body">
                 <h5 class="card-title">Lưu ý</h5>
@@ -122,6 +165,7 @@
                     <li>Vui lòng kiểm tra kỹ địa chỉ và số điện thoại nhận hàng</li>
                     <li>Thời gian giao hàng dự kiến: 2-3 ngày làm việc</li>
                     <li>Hỗ trợ đổi trả trong 7 ngày</li>
+                    <li>Thanh toán khi nhận hàng (COD)</li>
                 </ul>
             </div>
         </div>

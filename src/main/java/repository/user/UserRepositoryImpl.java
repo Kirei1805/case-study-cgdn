@@ -135,6 +135,22 @@ public class UserRepositoryImpl implements UserRepository {
 		return false;
 	}
 
+	@Override
+	public User getUserByEmail(String email) {
+		String sql = "SELECT * FROM users WHERE email = ?";
+		try (Connection conn = DBRepository.getConnection();
+			 PreparedStatement stmt = conn.prepareStatement(sql)) {
+			stmt.setString(1, email);
+			ResultSet rs = stmt.executeQuery();
+			if (rs.next()) {
+				return mapUser(rs);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
 	private User mapUser(ResultSet rs) throws SQLException {
 		User user = new User();
 		user.setId(rs.getInt("id"));

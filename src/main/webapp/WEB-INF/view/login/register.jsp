@@ -31,8 +31,11 @@
                                 <div class="input-group">
                                     <span class="input-group-text"><i class="fas fa-user"></i></span>
                                     <input type="text" class="form-control" id="fullName" name="fullName" 
-                                           value="${fullName}" required>
+                                           value="${fullName}" required minlength="2" maxlength="50"
+                                           pattern="^[a-zA-ZÀ-ỹ\s]+$">
                                 </div>
+                                <div class="form-text">2-50 ký tự, chỉ chứa chữ cái và khoảng trắng</div>
+                                <div class="invalid-feedback"></div>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -41,8 +44,11 @@
                                 <div class="input-group">
                                     <span class="input-group-text"><i class="fas fa-at"></i></span>
                                     <input type="text" class="form-control" id="username" name="username" 
-                                           value="${username}" required>
+                                           value="${username}" required minlength="3" maxlength="20"
+                                           pattern="^[a-zA-Z0-9_]{3,20}$">
                                 </div>
+                                <div class="form-text">3-20 ký tự, chỉ chứa chữ cái, số và dấu gạch dưới</div>
+                                <div class="invalid-feedback"></div>
                             </div>
                         </div>
                     </div>
@@ -63,9 +69,10 @@
                                 <div class="input-group">
                                     <span class="input-group-text"><i class="fas fa-lock"></i></span>
                                     <input type="password" class="form-control" id="password" name="password" 
-                                           required minlength="6">
+                                           required minlength="6" pattern="^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d@$!%*?&]{6,}$">
                                 </div>
-                                <div class="form-text">Mật khẩu phải có ít nhất 6 ký tự</div>
+                                <div class="form-text">Ít nhất 6 ký tự, bao gồm chữ cái và số</div>
+                                <div class="invalid-feedback"></div>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -106,27 +113,115 @@
     </div>
 </div>
 
-<!-- Password validation script -->
+<!-- Enhanced validation script -->
 <script>
-document.getElementById('confirmPassword').addEventListener('input', function() {
-    const password = document.getElementById('password').value;
-    const confirmPassword = this.value;
-    
-    if (password !== confirmPassword) {
-        this.setCustomValidity('Mật khẩu xác nhận không khớp');
+// Form validation utilities
+function showFieldError(field, message) {
+    field.classList.add('is-invalid');
+    field.classList.remove('is-valid');
+    const feedback = field.parentElement.parentElement.querySelector('.invalid-feedback');
+    if (feedback) feedback.textContent = message;
+}
+
+function showFieldSuccess(field) {
+    field.classList.add('is-valid');
+    field.classList.remove('is-invalid');
+    const feedback = field.parentElement.parentElement.querySelector('.invalid-feedback');
+    if (feedback) feedback.textContent = '';
+}
+
+function clearFieldValidation(field) {
+    field.classList.remove('is-valid', 'is-invalid');
+    const feedback = field.parentElement.parentElement.querySelector('.invalid-feedback');
+    if (feedback) feedback.textContent = '';
+}
+
+// Real-time validation
+document.getElementById('username').addEventListener('input', function() {
+    const value = this.value.trim();
+    if (value === '') {
+        clearFieldValidation(this);
+    } else if (!/^[a-zA-Z0-9_]{3,20}$/.test(value)) {
+        showFieldError(this, 'Tên đăng nhập phải có 3-20 ký tự, chỉ chứa chữ cái, số và dấu gạch dưới');
     } else {
-        this.setCustomValidity('');
+        showFieldSuccess(this);
+    }
+});
+
+document.getElementById('fullName').addEventListener('input', function() {
+    const value = this.value.trim();
+    if (value === '') {
+        clearFieldValidation(this);
+    } else if (!/^[a-zA-ZÀ-ỹ\s]{2,50}$/.test(value)) {
+        showFieldError(this, 'Họ tên phải có 2-50 ký tự và chỉ chứa chữ cái');
+    } else {
+        showFieldSuccess(this);
+    }
+});
+
+document.getElementById('email').addEventListener('input', function() {
+    const value = this.value.trim();
+    if (value === '') {
+        clearFieldValidation(this);
+    } else if (!/^[a-zA-Z0-9_+&*-]+(?:\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\.)+[a-zA-Z]{2,7}$/.test(value)) {
+        showFieldError(this, 'Email không đúng định dạng');
+    } else {
+        showFieldSuccess(this);
     }
 });
 
 document.getElementById('password').addEventListener('input', function() {
+    const value = this.value;
     const confirmPassword = document.getElementById('confirmPassword');
+    
+    if (value === '') {
+        clearFieldValidation(this);
+    } else if (!/^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d@$!%*?&]{6,}$/.test(value)) {
+        showFieldError(this, 'Mật khẩu phải có ít nhất 6 ký tự, bao gồm chữ cái và số');
+    } else {
+        showFieldSuccess(this);
+    }
+    
+    // Re-validate confirm password
     if (confirmPassword.value) {
-        if (this.value !== confirmPassword.value) {
-            confirmPassword.setCustomValidity('Mật khẩu xác nhận không khớp');
+        if (value !== confirmPassword.value) {
+            showFieldError(confirmPassword, 'Mật khẩu xác nhận không khớp');
         } else {
-            confirmPassword.setCustomValidity('');
+            showFieldSuccess(confirmPassword);
         }
+    }
+});
+
+document.getElementById('confirmPassword').addEventListener('input', function() {
+    const password = document.getElementById('password').value;
+    const confirmPassword = this.value;
+    
+    if (confirmPassword === '') {
+        clearFieldValidation(this);
+    } else if (password !== confirmPassword) {
+        showFieldError(this, 'Mật khẩu xác nhận không khớp');
+    } else {
+        showFieldSuccess(this);
+    }
+});
+
+// Form submit validation
+document.querySelector('form').addEventListener('submit', function(e) {
+    let isValid = true;
+    const fields = ['username', 'fullName', 'email', 'password', 'confirmPassword'];
+    
+    fields.forEach(fieldId => {
+        const field = document.getElementById(fieldId);
+        if (!field.checkValidity()) {
+            isValid = false;
+            field.classList.add('is-invalid');
+        }
+    });
+    
+    if (!isValid) {
+        e.preventDefault();
+        const firstInvalid = document.querySelector('.is-invalid');
+        if (firstInvalid) firstInvalid.focus();
     }
 });
 </script>

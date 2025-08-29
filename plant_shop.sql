@@ -100,6 +100,18 @@ CREATE TABLE wishlist (
                           UNIQUE(user_id, plant_id)
 );
 
+-- 10. Bảng reset password tokens
+CREATE TABLE password_reset_tokens (
+                                      id INT AUTO_INCREMENT PRIMARY KEY,
+                                      user_id INT,
+                                      token VARCHAR(255) NOT NULL,
+                                      expires_at DATETIME NOT NULL,
+                                      used BOOLEAN DEFAULT FALSE,
+                                      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                                      FOREIGN KEY (user_id) REFERENCES users(id),
+                                      UNIQUE(token)
+);
+
 
 
 

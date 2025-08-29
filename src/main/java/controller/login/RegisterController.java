@@ -3,6 +3,7 @@ package controller.login;
 import service.user.UserService;
 import service.user.UserServiceImpl;
 import model.User;
+import util.ValidationUtil;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -36,32 +37,55 @@ public class RegisterController extends HttpServlet {
         String email = request.getParameter("email");
         String fullName = request.getParameter("fullName");
         
-        // Validation
-        if (username == null || password == null || confirmPassword == null || 
-            email == null || fullName == null || 
-            username.trim().isEmpty() || password.trim().isEmpty() || 
-            confirmPassword.trim().isEmpty() || email.trim().isEmpty() || 
-            fullName.trim().isEmpty()) {
-            
-            request.setAttribute("error", "Vui lòng nhập đầy đủ thông tin");
-            request.setAttribute("username", username);
-            request.setAttribute("email", email);
-            request.setAttribute("fullName", fullName);
-            request.getRequestDispatcher("/WEB-INF/view/login/register.jsp").forward(request, response);
-            return;
+        // Enhanced Validation
+        StringBuilder errors = new StringBuilder();
+        
+        // Check required fields
+        if (!ValidationUtil.isNotEmpty(username)) {
+            errors.append("Tên đăng nhập không được để trống. ");
+        } else if (!ValidationUtil.isValidUsername(username.trim())) {
+            errors.append("Tên đăng nhập phải có 3-20 ký tự, chỉ chứa chữ cái, số và dấu gạch dưới. ");
         }
         
-        if (!password.equals(confirmPassword)) {
-            request.setAttribute("error", "Mật khẩu xác nhận không khớp");
-            request.setAttribute("username", username);
-            request.setAttribute("email", email);
-            request.setAttribute("fullName", fullName);
-            request.getRequestDispatcher("/WEB-INF/view/login/register.jsp").forward(request, response);
-            return;
+        if (!ValidationUtil.isNotEmpty(fullName)) {
+            errors.append("Họ tên không được để trống. ");
+        } else if (!ValidationUtil.isValidFullName(fullName.trim())) {
+            errors.append("Họ tên phải có 2-50 ký tự và chỉ chứa chữ cái. ");
         }
         
-        if (userService.isUsernameExists(username.trim())) {
-            request.setAttribute("error", "Tên đăng nhập đã tồn tại");
+        if (!ValidationUtil.isNotEmpty(email)) {
+            errors.append("Email không được để trống. ");
+        } else if (!ValidationUtil.isValidEmail(email.trim())) {
+            errors.append("Email không đúng định dạng. ");
+        }
+        
+        if (!ValidationUtil.isNotEmpty(password)) {
+            errors.append("Mật khẩu không được để trống. ");
+        } else if (!ValidationUtil.isValidPassword(password)) {
+            errors.append("Mật khẩu phải có ít nhất 6 ký tự, bao gồm chữ cái và số. ");
+        }
+        
+        if (!ValidationUtil.isNotEmpty(confirmPassword)) {
+            errors.append("Xác nhận mật khẩu không được để trống. ");
+        } else if (!password.equals(confirmPassword)) {
+            errors.append("Mật khẩu xác nhận không khớp. ");
+        }
+        
+        // Check if username already exists
+        if (ValidationUtil.isNotEmpty(username) && ValidationUtil.isValidUsername(username.trim()) 
+            && userService.isUsernameExists(username.trim())) {
+            errors.append("Tên đăng nhập đã tồn tại. ");
+        }
+        
+        // Check if email already exists
+        if (ValidationUtil.isNotEmpty(email) && ValidationUtil.isValidEmail(email.trim()) 
+            && userService.isEmailExists(email.trim())) {
+            errors.append("Email đã được sử dụng. ");
+        }
+        
+        // If there are validation errors
+        if (errors.length() > 0) {
+            request.setAttribute("error", errors.toString().trim());
             request.setAttribute("username", username);
             request.setAttribute("email", email);
             request.setAttribute("fullName", fullName);

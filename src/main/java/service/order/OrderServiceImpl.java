@@ -43,4 +43,8 @@ public class OrderServiceImpl implements OrderService {
     public List<Order> getOrdersByUser(int userId) {
         return orderRepository.findByUser(userId);
     }
+    
+    public int checkoutFromCartAndGetOrderId(int userId, int addressId) {
+        return orderRepository.checkoutFromCartAndGetOrderId(userId, addressId);
+    }
 }

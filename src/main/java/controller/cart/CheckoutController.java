@@ -36,10 +36,25 @@ public class CheckoutController extends HttpServlet {
 			response.sendRedirect(request.getContextPath() + "/login?redirect=" + request.getRequestURI());
 			return;
 		}
+		
+		// Get cart items and total for display
+		service.cart.CartService cartService = new service.cart.CartServiceImpl();
+		List<model.CartItem> cartItems = cartService.getCartItems(user.getId());
+		double total = cartService.getCartTotal(user.getId());
+		
+		// Redirect to cart if empty
+		if (cartItems.isEmpty()) {
+			response.sendRedirect(request.getContextPath() + "/cart");
+			return;
+		}
+		
 		List<Address> addresses = addressService.getAddressesByUser(user.getId());
 		if (addresses == null) addresses = new ArrayList<>();
 		Address defaultAddress = addressService.getDefaultAddress(user.getId());
 		Integer defaultAddressId = defaultAddress != null ? defaultAddress.getId() : null;
+		
+		request.setAttribute("cartItems", cartItems);
+		request.setAttribute("total", total);
 		request.setAttribute("addresses", addresses);
 		request.setAttribute("defaultAddressId", defaultAddressId);
 		request.getRequestDispatcher("/WEB-INF/view/cart/checkout.jsp").forward(request, response);
@@ -91,16 +106,16 @@ public class CheckoutController extends HttpServlet {
 		int addressId = Integer.parseInt(addressIdStr);
 		
 		// Use the helper method from OrderServiceImpl to checkout from cart
-		boolean success = false;
+		int orderId = 0;
 		if (orderService instanceof OrderServiceImpl) {
-			success = ((OrderServiceImpl) orderService).checkoutFromCart(user.getId(), addressId);
+			orderId = ((OrderServiceImpl) orderService).checkoutFromCartAndGetOrderId(user.getId(), addressId);
 		}
 		
-		if (!success) {
+		if (orderId <= 0) {
 			request.setAttribute("error", "Giỏ hàng trống hoặc có lỗi khi tạo đơn hàng");
 			doGet(request, response);
 			return;
 		}
-		response.sendRedirect(request.getContextPath() + "/order-success");
+		response.sendRedirect(request.getContextPath() + "/order-success?id=" + orderId);
 	}
 }

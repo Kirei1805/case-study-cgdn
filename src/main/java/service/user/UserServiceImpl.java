@@ -93,5 +93,10 @@ public class UserServiceImpl implements UserService {
 	public boolean changePassword(int id, String oldPassword, String newPassword) {
 		return updatePassword(id, oldPassword, newPassword);
 	}
+	
+	@Override
+	public User getUserByEmail(String email) {
+		return userRepository.getUserByEmail(email);
+	}
 }
 

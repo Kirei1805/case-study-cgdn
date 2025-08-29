@@ -67,4 +67,30 @@ public class Order {
 
     public List<OrderItem> getOrderItems() { return orderItems; }
     public void setOrderItems(List<OrderItem> orderItems) { this.orderItems = orderItems; }
+    
+    // Helper methods for JSP formatting
+    public String getFormattedDate() {
+        if (orderDate == null) return "";
+        return String.format("%02d/%02d/%d", 
+            orderDate.getDayOfMonth(), 
+            orderDate.getMonthValue(), 
+            orderDate.getYear());
+    }
+    
+    public String getFormattedTime() {
+        if (orderDate == null) return "";
+        return String.format("%02d:%02d", 
+            orderDate.getHour(), 
+            orderDate.getMinute());
+    }
+    
+    public String getFormattedDateTime() {
+        if (orderDate == null) return "";
+        return String.format("%02d/%02d/%d %02d:%02d", 
+            orderDate.getDayOfMonth(), 
+            orderDate.getMonthValue(), 
+            orderDate.getYear(),
+            orderDate.getHour(), 
+            orderDate.getMinute());
+    }
 }

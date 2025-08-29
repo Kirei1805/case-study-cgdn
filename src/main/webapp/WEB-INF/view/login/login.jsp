@@ -73,8 +73,8 @@
                 <hr class="my-4">
 
                 <div class="text-center">
-                    <a href="#" class="text-muted small">
-                        <i class="fas fa-question-circle me-1"></i>Quên mật khẩu?
+                    <a href="${pageContext.request.contextPath}/forgot-password" class="text-decoration-none">
+                        <i class="fas fa-key me-1"></i>Quên mật khẩu?
                     </a>
                 </div>
             </div>
