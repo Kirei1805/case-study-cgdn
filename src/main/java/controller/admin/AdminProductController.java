@@ -65,6 +65,13 @@ public class AdminProductController extends HttpServlet {
                 plantService.deletePlant(deleteId);
                 resp.sendRedirect(req.getContextPath() + "/admin/products");
                 break;
+            case "search":
+                String keyword = req.getParameter("keyword");
+                req.setAttribute("products", plantService.searchPlantsByName(keyword));
+                req.setAttribute("categories", categoryService.getAllCategories());
+                req.getRequestDispatcher("/WEB-INF/view/admin/products.jsp").forward(req, resp);
+                break;
+
 
             default: // list
                 req.setAttribute("products", plantService.getAllPlants());

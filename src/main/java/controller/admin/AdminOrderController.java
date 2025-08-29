@@ -32,6 +32,7 @@ public class AdminOrderController extends HttpServlet {
         HttpSession session = req.getSession();
         User user = (User) session.getAttribute("user");
 
+        // Kiểm tra đăng nhập + quyền admin
         if (user == null || !userService.isAdmin(user)) {
             resp.sendRedirect(req.getContextPath() + "/login");
             return;
@@ -41,7 +42,8 @@ public class AdminOrderController extends HttpServlet {
         if (action == null) action = "list";
 
         switch (action) {
-            case "detail":
+            case "detail": {
+                // Xem chi tiết đơn hàng
                 int orderId = Integer.parseInt(req.getParameter("id"));
                 Order order = orderService.getOrderById(orderId);
                 List<OrderItem> items = orderService.getOrderItems(orderId);
@@ -55,24 +57,25 @@ public class AdminOrderController extends HttpServlet {
                 req.setAttribute("orderItems", items);
                 req.getRequestDispatcher("/WEB-INF/view/admin/order-detail.jsp")
                         .forward(req, resp);
-                System.out.println("OrderId param = " + orderId);
-                System.out.println("Order = " + order);
-                System.out.println("Items = " + items.size());
                 break;
+            }
 
-            case "delete":
-                orderId = Integer.parseInt(req.getParameter("id"));
+            case "delete": {
+                // Xóa đơn hàng
+                int orderId = Integer.parseInt(req.getParameter("id"));
                 orderService.deleteOrder(orderId);
                 resp.sendRedirect(req.getContextPath() + "/admin/orders");
                 break;
+            }
 
-            default:
+            default: {
+                // Danh sách đơn hàng
                 List<Order> orders = orderService.getAllOrders();
                 req.setAttribute("orders", orders);
                 req.getRequestDispatcher("/WEB-INF/view/admin/orders.jsp")
                         .forward(req, resp);
+            }
         }
-
     }
 
     @Override
@@ -84,12 +87,16 @@ public class AdminOrderController extends HttpServlet {
         if ("updateStatus".equals(action)) {
             int orderId = Integer.parseInt(req.getParameter("id"));
             String status = req.getParameter("status");
-            orderService.updateOrderStatus(orderId, status);
+
+            // Chỉ cho phép update 4 trạng thái trong DB
+            if (status.equals("pending") || status.equals("processing") ||
+                    status.equals("shipped") || status.equals("cancelled")) {
+                orderService.updateOrderStatus(orderId, status);
+            }
+
             resp.sendRedirect(req.getContextPath() + "/admin/orders?action=detail&id=" + orderId);
         } else {
             resp.sendRedirect(req.getContextPath() + "/admin/orders");
         }
-
     }
-
 }
