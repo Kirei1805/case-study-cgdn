@@ -38,4 +38,12 @@ public class OrderItem {
 
     public Plant getPlant() { return plant; }
     public void setPlant(Plant plant) { this.plant = plant; }
+
+    // Calculated field - subtotal for this item
+    public BigDecimal getSubTotal() {
+        if (unitPrice != null) {
+            return unitPrice.multiply(BigDecimal.valueOf(quantity));
+        }
+        return BigDecimal.ZERO;
+    }
 }

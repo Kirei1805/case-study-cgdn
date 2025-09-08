@@ -24,6 +24,11 @@ public class PlantServiceImpl implements PlantService {
 	}
 
 	@Override
+	public List<Plant> getAllPlantsForAdmin() {
+		return plantRepository.getAllPlantsForAdmin();
+	}
+
+	@Override
 	public List<Plant> getPlantsByCategory(int categoryId) {
 		return plantRepository.getPlantsByCategory(categoryId);
 	}

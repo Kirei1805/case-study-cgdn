@@ -23,20 +23,15 @@ tasks.withType(JavaCompile) {
 
 dependencies {
     compileOnly('javax.servlet:javax.servlet-api:4.0.1')
-    
-    // MySQL Connector - đảm bảo được đóng gói vào WAR
+
     runtimeOnly 'mysql:mysql-connector-java:8.0.33'
-    
-    // JSON processing
+
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.2'
-    
-    // Password hashing
+
     implementation 'org.mindrot:jbcrypt:0.4'
-    
-    // JSTL for JSP
+
     implementation 'javax.servlet:jstl:1.2'
-    
-    // JavaMail for sending emails
+
     implementation 'com.sun.mail:javax.mail:1.6.2'
     implementation 'javax.activation:activation:1.1.1'
 

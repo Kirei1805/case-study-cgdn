@@ -8,6 +8,7 @@ import java.util.List;
 
 public interface PlantService {
     List<Plant> getAllPlants();
+    List<Plant> getAllPlantsForAdmin(); // For admin - includes all plants
     List<Plant> getPlantsByCategory(int categoryId);
     List<Plant> searchPlantsByName(String name);
     Plant getPlantById(int id);

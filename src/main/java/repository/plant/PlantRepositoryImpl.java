@@ -14,9 +14,30 @@ public class PlantRepositoryImpl implements PlantRepository {
 	@Override
 	public List<Plant> getAllPlants() {
 		List<Plant> plants = new ArrayList<>();
+		// For public use - only active plants
 		String sql = "SELECT p.*, c.name as category_name FROM plants p " +
 					"LEFT JOIN categories c ON p.category_id = c.id " +
 					"WHERE p.is_active = true ORDER BY p.id DESC";
+		try (Connection conn = DBRepository.getConnection();
+			 PreparedStatement stmt = conn.prepareStatement(sql);
+			 ResultSet rs = stmt.executeQuery()) {
+			while (rs.next()) {
+				Plant plant = mapPlant(rs);
+				plants.add(plant);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return plants;
+	}
+
+	@Override
+	public List<Plant> getAllPlantsForAdmin() {
+		List<Plant> plants = new ArrayList<>();
+		// For admin - get all plants regardless of status
+		String sql = "SELECT p.*, c.name as category_name FROM plants p " +
+					"LEFT JOIN categories c ON p.category_id = c.id " +
+					"ORDER BY p.id DESC";
 		try (Connection conn = DBRepository.getConnection();
 			 PreparedStatement stmt = conn.prepareStatement(sql);
 			 ResultSet rs = stmt.executeQuery()) {

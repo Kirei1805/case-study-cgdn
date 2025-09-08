@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
+import util.PaginationUtil;
 
 @WebServlet(urlPatterns = {"/orders", "/order-success", "/order-detail"})
 public class OrderController extends HttpServlet {
@@ -61,8 +62,43 @@ public class OrderController extends HttpServlet {
 			}
 		}
 
-		List<Order> orders = orderService.getOrdersByUser(user.getId());
+		// Get pagination parameters
+		String pageParam = request.getParameter("page");
+		String sizeParam = request.getParameter("size");
+		
+		int page = 1;
+		int size = 5; // Default page size for user orders
+		
+		try {
+			if (pageParam != null && !pageParam.trim().isEmpty()) {
+				page = Integer.parseInt(pageParam);
+			}
+			if (sizeParam != null && !sizeParam.trim().isEmpty()) {
+				size = Integer.parseInt(sizeParam);
+				// Limit page size to reasonable values
+				size = Math.min(Math.max(size, 1), 50);
+			}
+		} catch (NumberFormatException e) {
+			// Use defaults if invalid numbers
+		}
+		
+		// Get all user orders
+		List<Order> allOrders = orderService.getOrdersByUser(user.getId());
+		
+		// Create pagination
+		PaginationUtil<Order> pagination = new PaginationUtil<>(allOrders, page, size);
+		List<Order> orders = pagination.getPageItems();
+		
+		// Build other params for pagination links
+		StringBuilder otherParams = new StringBuilder();
+		if (sizeParam != null && !sizeParam.trim().isEmpty()) {
+			otherParams.append("size=").append(size);
+		}
+		
 		request.setAttribute("orders", orders);
+		request.setAttribute("pagination", pagination);
+		request.setAttribute("pageUrl", request.getContextPath() + "/orders?");
+		request.setAttribute("otherParams", otherParams.toString());
 		request.getRequestDispatcher("/WEB-INF/view/user/orders.jsp").forward(request, response);
 	}
 }

@@ -6,6 +6,9 @@
     <jsp:param name="title" value="Lịch sử đơn hàng"/>
 </jsp:include>
 
+<!-- Include Pagination CSS -->
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/pagination.css">
+
 <!-- Breadcrumb -->
 <nav aria-label="breadcrumb" class="mb-4">
     <ol class="breadcrumb">
@@ -105,6 +108,11 @@
         </div>
     </c:otherwise>
 </c:choose>
+
+<!-- Pagination -->
+<c:if test="${not empty pagination}">
+    <jsp:include page="../common/pagination.jsp"/>
+</c:if>
 
 <script>
 function cancelOrder(orderId) {

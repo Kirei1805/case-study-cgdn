@@ -55,9 +55,10 @@ public class AdminController extends HttpServlet {
         request.setAttribute("totalOrders", totalOrders);
         request.setAttribute("totalUsers", totalUsers);
         request.setAttribute("totalProducts", totalProducts);
-        request.setAttribute("newOrders", newOrders);
+        request.setAttribute("pendingOrders", newOrders);
+        request.setAttribute("recentOrders", orderService.getAllOrders());
 
-        request.getRequestDispatcher("/WEB-INF/view/admin/admin.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/view/admin/dashboard.jsp").forward(request, response);
     }
 }
 

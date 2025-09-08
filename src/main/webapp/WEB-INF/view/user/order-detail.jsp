@@ -84,7 +84,7 @@
                                         <fmt:formatNumber value="${it.unitPrice}" type="currency" currencySymbol="VNĐ"/> x ${it.quantity}
                                     </div>
                                     <div class="fw-bold text-success">
-                                        <fmt:formatNumber value="${it.unitPrice * it.quantity}" type="currency" currencySymbol="VNĐ"/>
+                                        <fmt:formatNumber value="${it.subTotal}" type="currency" currencySymbol="VNĐ"/>
                                     </div>
                                 </div>
                             </div>
