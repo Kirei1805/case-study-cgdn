@@ -1,0 +1,59 @@
+/* Compact scale for Admin screens */
+
+:root {
+	--compact-font-scale: 0.94; /* 94% of base */
+	--compact-padding-y: 0.5rem;
+	--compact-padding-x: 0.75rem;
+	--compact-radius: 10px;
+}
+
+/* Header */
+.page-header { padding: 1.25rem; }
+.page-header h1 { font-size: 1.5rem; margin-bottom: 0.25rem; }
+.page-header p { font-size: 0.95rem; }
+
+/* Cards */
+.card { border-radius: var(--compact-radius); }
+.card-header { padding: 0.75rem 1rem; }
+.card-body { padding: 1rem; }
+
+/* Buttons */
+.btn { padding: var(--compact-padding-y) var(--compact-padding-x); font-size: calc(1rem * var(--compact-font-scale)); }
+.btn-group-sm > .btn, .btn-sm { padding: 0.35rem 0.5rem; font-size: 0.875rem; border-radius: 8px; }
+
+/* Forms */
+.form-control, .form-select { padding: var(--compact-padding-y) var(--compact-padding-x); font-size: calc(1rem * var(--compact-font-scale)); }
+.form-label { margin-bottom: 0.35rem; font-size: 0.95rem; }
+
+/* Tables */
+.table thead th { padding: 0.75rem; font-size: 0.95rem; }
+.table tbody td { padding: 0.65rem 0.75rem; font-size: 0.95rem; }
+
+/* Badges */
+.badge { padding: 0.35rem 0.6rem; font-size: 0.8rem; }
+
+/* Sidebar */
+.sidebar .nav-link { padding: 10px 12px; }
+.sidebar h5 { font-size: 1.25rem; }
+
+/* Pagination */
+.pagination .page-link { padding: 0.4rem 0.6rem; font-size: 0.95rem; }
+.page-size-select { height: 36px; }
+
+/* Widgets numbers */
+.stat-card .stat-number { font-size: 1.5rem; }
+.stat-card .stat-label { font-size: 0.95rem; }
+
+/* Responsive fine-tuning */
+@media (max-width: 1200px) {
+	.page-header h1 { font-size: 1.4rem; }
+}
+
+@media (max-width: 992px) {
+	.table tbody td, .table thead th { padding: 0.6rem; }
+}
+
+@media (max-width: 768px) {
+	.page-header { padding: 1rem; }
+	.page-header h1 { font-size: 1.25rem; }
+}

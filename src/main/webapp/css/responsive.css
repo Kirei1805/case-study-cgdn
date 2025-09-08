@@ -1,0 +1,118 @@
+/* Global responsive utilities and compact defaults */
+
+/* Container width tweaks to avoid overflow on small devices */
+.container,
+.container-fluid {
+	padding-left: 1rem;
+	padding-right: 1rem;
+}
+
+/* Images and media scale within their containers */
+img,
+video,
+canvas,
+iframe {
+	max-width: 100%;
+	height: auto;
+}
+
+/* Prevent horizontal overflow while still allowing scroll if needed */
+html, body {
+	max-width: 100%;
+	overflow-x: auto;
+}
+
+/* Tables responsive wrapper */
+.table-responsive {
+	overflow-x: auto;
+	-webkit-overflow-scrolling: touch;
+}
+
+/* Cards grid spacing on small screens */
+.row.g-3, .row.g-4, .row.gx-3, .row.gx-4 {
+	margin-left: 0;
+	margin-right: 0;
+}
+
+/* Navbar tweaks for better touch targets */
+.navbar .nav-link {
+	padding-top: 0.5rem;
+	padding-bottom: 0.5rem;
+}
+
+/* Compact defaults for buttons, inputs, tables site-wide */
+.btn {
+	padding: 0.5rem 0.75rem;
+	font-size: 0.95rem;
+	border-radius: 8px;
+}
+
+.form-control, .form-select {
+	padding: 0.5rem 0.75rem;
+	font-size: 0.95rem;
+}
+
+table th, table td {
+	padding: 0.65rem 0.75rem;
+}
+
+/* Pagination component responsive layout */
+.pagination-container {
+	display: grid;
+	gap: 0.75rem;
+	align-items: center;
+	justify-items: center;
+}
+
+.pagination-container .pagination-info {
+	font-size: 0.95rem;
+	text-align: center;
+}
+
+/* Make pagination controls wrap on small screens */
+.pagination {
+	flex-wrap: wrap;
+}
+
+.page-size-container {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.5rem;
+	flex-wrap: wrap;
+}
+
+.page-size-select {
+	min-width: 84px;
+}
+
+/* Breakpoints */
+@media (max-width: 992px) {
+	/* Slightly reduce large headings/paddings */
+	h1, .h1 { font-size: calc(1.375rem + 1.5vw); }
+}
+
+@media (max-width: 768px) {
+	/* Stack pagination sections */
+	.pagination-container {
+		grid-template-columns: 1fr;
+	}
+
+	/* Reduce button paddings for pagination */
+	.pagination .page-link {
+		padding: 0.4rem 0.6rem;
+		font-size: 0.95rem;
+	}
+
+	/* Make forms easier to use */
+	.form-control, .form-select, .btn {
+		font-size: 1rem;
+	}
+}
+
+@media (max-width: 576px) {
+	/* Tighten spacing further */
+	.container, .container-fluid { padding-left: 0.75rem; padding-right: 0.75rem; }
+	.page-size-container { gap: 0.35rem; }
+	.pagination .page-link { padding: 0.35rem 0.5rem; }
+	.pagination-container .pagination-info { font-size: 0.9rem; }
+}
